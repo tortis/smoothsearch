@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SmoothApp">
+<head>
+	<title>Chat Example</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body ng-controller="SmoothCtrl">
+	<div class="container">
+		<div class="list-group">
+			<div class="list-group-item" ng-repeat="(hostname, client) in clients">
+				<h4 class="list-group-item-heading">{{client.hostname}}</h4>
+				<dl>
+					<dt>Starting Number</dt>
+					<dd>{{client.init}}</dt>
+					<dt>Increment</dt>
+					<dd>{{client.inc}}</dd>
+					<dt>Current a</dt>
+					<dd>{{client.last_itr}}</dd>
+					<dt>Smoothest</dt>
+					<dd>{{client.smoothness}}</dd>
+					<dt>Smooth num</dt>
+					<dd>{{client.smooth_num}}</dd>
+				</dl>
+			</div>
+			<div class="list-group-item" ng-show="messages.length == 0"><i>No Workers</i></div>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+	<script src="/js/app.js"></script> 
+</body>
+</html>
