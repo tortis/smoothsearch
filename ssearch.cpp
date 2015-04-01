@@ -7,7 +7,6 @@ NTL_CLIENT
 long getSmoothness(const GF2X& f) {
 	static vec_pair_GF2X_long r;
 	DDF(r, f);
-	std::cout << r << std::endl;
 	return r[r.length()-1].b;
 }
 
@@ -16,10 +15,8 @@ int main(int argc, char* argv[])
 	ZZ a, inc;
 	if (argc == 3) {
 		// Use commandline specified a and inc
-		long ai = atol(argv[1]);
-		long inci = atol(argv[2]);
-		a = ZZ(ai);
-		inc = ZZ(inci);
+		a = conv<ZZ>(argv[1]);
+		inc = conv<ZZ>(argv[2]);
 	} else {
 		// Use default a and inc
 		a = ZZ(113851762);
