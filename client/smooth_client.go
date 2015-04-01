@@ -42,7 +42,7 @@ func sendUpdate() {
 	}
 	resp, err := http.Post(*server+"/itr", "application/json", bytes.NewBuffer(jsonBytes))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	resp.Body.Close()
 }
@@ -59,7 +59,7 @@ func sendHit() {
 	}
 	resp, err := http.Post(*server+"/hit", "application/json", bytes.NewBuffer(jsonBytes))
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	resp.Body.Close()
 }
@@ -90,14 +90,15 @@ func main() {
 	}
 	reader := bufio.NewReader(out)
 
+	// Notify the server we are starting a job
+	sendUpdate()
+
 	// Start the command
 	err = smoothFinder.Start()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Notify the server we are starting a job
-	sendUpdate()
 	// Read the output and send data to the server
 	var line string
 	for {

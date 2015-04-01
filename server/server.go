@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -16,12 +17,13 @@ type hit_msg struct {
 }
 
 type Client struct {
-	Hostname   string `json:"hostname"`
-	Init       string `json:"init"`
-	Inc        string `json:"inc"`
-	Last_itr   string `json:"last_itr"`
-	Smooth_num string `json:"smooth_num"`
-	Smoothness string `json:"smoothness"`
+	Hostname    string `json:"hostname"`
+	Init        string `json:"init"`
+	Inc         string `json:"inc"`
+	Last_itr    string `json:"last_itr"`
+	Smooth_num  string `json:"smooth_num"`
+	Smoothness  string `json:"smoothness"`
+	Last_update int64  `json:"time"`
 }
 
 type WSMessage struct {
@@ -53,6 +55,7 @@ func itrHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	c.Last_update = time.Now().Unix()
 	smooth_clients[c.Hostname] = &c
 	wsmsg := WSMessage{
 		Type:    "itr",
@@ -80,6 +83,7 @@ func hitHandler(w http.ResponseWriter, r *http.Request) {
 	if c, exists := smooth_clients[hit.Hostname]; exists {
 		c.Smoothness = hit.Smoothness
 		c.Smooth_num = hit.Smooth_num
+		c.Last_update = time.Now().Unix()
 	}
 	// Notify web clients
 	wsmsg := WSMessage{
