@@ -29,7 +29,7 @@ type Client struct {
 
 func sendUpdate() {
 	im := Client{
-		Hostname:   hostname,
+		Hostname:   *hostname,
 		Init:       *start,
 		Inc:        *inc,
 		Last_itr:   last_itr,
@@ -43,13 +43,14 @@ func sendUpdate() {
 	resp, err := http.Post(*server+"/itr", "application/json", bytes.NewBuffer(jsonBytes))
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	resp.Body.Close()
 }
 
 func sendHit() {
 	hm := hit_msg{
-		Hostname:   hostname,
+		Hostname:   *hostname,
 		Smooth_num: smooth_num,
 		Smoothness: smoothest,
 	}
@@ -60,11 +61,12 @@ func sendHit() {
 	resp, err := http.Post(*server+"/hit", "application/json", bytes.NewBuffer(jsonBytes))
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	resp.Body.Close()
 }
 
-var hostname string
+var hostname *string
 var smoothest string
 var smooth_num string
 var start *string
@@ -76,9 +78,12 @@ func main() {
 	start = flag.String("start", "113851762", "Start exponent")
 	inc = flag.String("inc", "1000000000", "Increment amount")
 	server = flag.String("server", "http://localhost:3000", "Server to report to")
+	hostname = flag.String("name", "", "client name, default is hostname")
 	flag.Parse()
 
-	hostname, _ = os.Hostname()
+	if *hostname == "" {
+		*hostname, _ = os.Hostname()
+	}
 
 	// Create the command that will be run
 	smoothFinder := exec.Command("./ssearch", *start, *inc)
@@ -117,6 +122,7 @@ func main() {
 		switch cmdv[0] {
 		case "ITR":
 			last_itr = cmdv[1]
+			log.Println(last_itr)
 			sendUpdate()
 			break
 		case "HIT":
