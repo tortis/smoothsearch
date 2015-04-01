@@ -81,7 +81,7 @@ func main() {
 	hostname, _ = os.Hostname()
 
 	// Create the command that will be run
-	smoothFinder := exec.Command("./smooth_num", *start, *inc)
+	smoothFinder := exec.Command("./ssearch", *start, *inc)
 
 	// Get the output pipe of the command
 	out, err := smoothFinder.StdoutPipe()
@@ -96,6 +96,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Notify the server we are starting a job
+	sendUpdate()
 	// Read the output and send data to the server
 	var line string
 	for {

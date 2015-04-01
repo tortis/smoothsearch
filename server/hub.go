@@ -1,7 +1,5 @@
 package main
 
-import "log"
-
 // hub maintains the set of active connections and broadcasts messages to the
 // connections.
 type hub struct {
@@ -36,7 +34,6 @@ func (h *hub) run() {
 				close(c.send)
 			}
 		case m := <-h.broadcast:
-			log.Println("Broadcasting: ", string(m))
 			for c := range h.connections {
 				select {
 				case c.send <- m:

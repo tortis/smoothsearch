@@ -1,3 +1,11 @@
 body {
 	margin-top: 20px;
 }
+
+.flashing {
+    transition: 0.25s linear all;
+}
+
+.flashing-on {
+    background-color: green;
+}

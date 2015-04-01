@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -45,7 +44,6 @@ func genIniMessage() []byte {
 }
 
 func itrHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("itrHandler called")
 	var c Client
 	msg, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -65,13 +63,8 @@ func itrHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	h.broadcast <- wsbytes
+	log.Printf("ITR %s %s\n", c.Hostname, c.Last_itr)
 	w.WriteHeader(http.StatusOK)
-
-	// dbg print clients
-	fmt.Println("Clients\n-------")
-	for h, _ := range smooth_clients {
-		fmt.Println(h)
-	}
 }
 
 func hitHandler(w http.ResponseWriter, r *http.Request) {
@@ -98,6 +91,7 @@ func hitHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	h.broadcast <- wsbytes
+	log.Printf("HIT %s %s %s\n", hit.Hostname, hit.Smooth_num, hit.Smoothness)
 	w.WriteHeader(http.StatusOK)
 }
 
